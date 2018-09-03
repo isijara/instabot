@@ -42,3 +42,4 @@ def download_photos(self, medias, folder, save_description=False):
             self.error_delay()
             broken_items = medias[medias.index(media):]
     return broken_items
+
