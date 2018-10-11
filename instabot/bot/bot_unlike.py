@@ -12,12 +12,6 @@ def unlike(self, media_id):
     return False
 
 
-def unlike_comment(self, comment_id):
-    if self.api.unlike_comment(comment_id):
-        return True
-    return False
-
-
 def unlike_medias(self, medias):
     broken_items = []
     self.logger.info("Going to unlike %d medias." % (len(medias)))
