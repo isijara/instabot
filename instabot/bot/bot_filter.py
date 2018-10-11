@@ -93,7 +93,6 @@ def search_stop_words_in_user(self, user_info):
 
     return False
 
-
 def search_blacklist_hashtags_in_media(self, media_id):
     text = ''
 
