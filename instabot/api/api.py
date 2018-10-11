@@ -71,8 +71,7 @@ class API(object):
                 self.logger.info("Logged-in successfully as '{}' using the cookie!".format(self.username))
                 return True
             except Exception as e:
-                print("The cookie is not found, but don't worry `instabot`"
-                      " will create it for you using your login details.")
+                print(str(e))
 
         if not cookie_is_loaded and (not self.is_logged_in or force):
             self.session = requests.Session()
