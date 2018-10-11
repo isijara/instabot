@@ -628,8 +628,9 @@ class API(object):
                 return user_feed[:amount]
             self.get_user_feed(user_id, next_max_id, min_timestamp)
             last_json = self.last_json
-            if 'items' not in last_json:
-                return user_feed
+            if "items" not in last_json:
+                # User is private, we have no access to the posts
+                return []
             user_feed += last_json["items"]
             if not last_json.get("more_available"):
                 return user_feed
@@ -643,9 +644,10 @@ class API(object):
             while True:
                 self.get_hashtag_feed(hashtag_str, next_max_id)
 
-                last_json = self.last_json
-                if 'items' not in last_json:
+                if not self.last_json.get('items'):
                     return hashtag_feed[:amount]
+
+                last_json = self.last_json
                 items = last_json['items']
 
                 try:
