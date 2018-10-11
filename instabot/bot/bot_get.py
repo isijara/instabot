@@ -3,6 +3,7 @@
     passed into e.g. like() or comment() functions.
 """
 
+import time
 from tqdm import tqdm
 
 
