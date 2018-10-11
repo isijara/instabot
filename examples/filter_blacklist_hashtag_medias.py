@@ -12,7 +12,7 @@ import sys
 sys.path.append(os.path.join(sys.path[0], '../'))
 from instabot import Bot
 
-blacklist_hashtag_input = input("\n Enter a blacklist hashtag: ")
+blacklist_hashtag_input = input("\n Enter a hashtag you want to filter out: ")
 
 bot = Bot(filter_users=True,
           filter_private_users=True,
