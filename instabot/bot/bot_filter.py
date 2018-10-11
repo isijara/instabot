@@ -58,19 +58,9 @@ def _get_media_ids(media_items):
 
 
 def check_media(self, media_id):
-    if self.api.media_info(media_id):
-        if search_blacklist_hashtags_in_media(self, media_id):
-            msg = 'Blacklist hashtag found in media, skipping!'
-            self.console_print(msg, 'red')
-            return False
-
-        self.api.media_info(media_id)
-        if self.filter_medias(self.api.last_json["items"]):
-            return check_user(self, self.get_media_owner(media_id))
-        return False
-
-    msg = 'Media ID error!'
-    self.console_print(msg, 'red')
+    self.api.media_info(media_id)
+    if self.filter_medias(self.api.last_json["items"]):
+        return check_user(self, self.get_media_owner(media_id))
     return False
 
 
@@ -93,27 +83,8 @@ def search_stop_words_in_user(self, user_info):
 
     return False
 
-def search_blacklist_hashtags_in_media(self, media_id):
-    text = ''
 
-    text += self.get_media_info(media_id)[0]['caption']['text']
-
-    comments_number = len(self.get_media_comments(media_id))
-
-    if comments_number > 6:
-        comments_number = 6
-
-    for i in range(0, comments_number):
-        text += self.get_media_comments(media_id, only_text=True)[i]
-
-    for blacklist_hashtag in self.blacklist_hashtags:
-        if blacklist_hashtag in text:
-            return True
-
-    return False
-
-
-def check_user(self, user_id, unfollowing=False):
+def check_user(self, user_id, filter_closed_acc=False, unfollowing=False):
     if not self.filter_users and not unfollowing:
         return True
 
@@ -161,15 +132,9 @@ def check_user(self, user_id, unfollowing=False):
         if self.filter_previously_followed and user_id in followed.list:
             self.console_print('info: account previously followed, skipping!', 'red')
             return False
-    if "has_anonymous_profile_picture" in user_info and self.filter_users_without_profile_photo:
-        if user_info["has_anonymous_profile_picture"]:
-            self.console_print('info: account DOES NOT HAVE A PROFILE PHOTO, skipping! ', 'red')
-            skipped.append(user_id)
-            return False
-    if "is_private" in user_info and self.filter_private_users:
+    if filter_closed_acc and "is_private" in user_info:
         if user_info["is_private"]:
             self.console_print('info: account is PRIVATE, skipping! ', 'red')
-            skipped.append(user_id)
             return False
     if "is_business" in user_info and self.filter_business_accounts:
         if user_info["is_business"]:
