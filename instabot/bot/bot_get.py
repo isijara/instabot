@@ -137,10 +137,8 @@ def get_timeline_users(self):
 
 
 def get_hashtag_users(self, hashtag):
-    if not self.api.get_hashtag_feed(hashtag):
-        self.logger.warning("Error while getting hastag feed.")
-        return []
-    return [str(i['user']['pk']) for i in self.api.last_json['items']]
+    self.api.get_hashtag_feed(hashtag)
+    return [str(i['user']['pk']) for i in self.api.last_json['items'] if i.get('user')]
 
 
 def get_geotag_users(self, geotag):
